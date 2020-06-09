@@ -43,7 +43,7 @@ public class OrderRecordDao {
 					"from orders\r\n" + 
 					"left join customers on orders.customer_id = customers.customer_id \r\n" + 
 					"order by order_time asc\r\n" + 
-					"limit 10";		
+					"limit 100";		
 			
 			System.out.println(sql);
 			PreparedStatement pStmt = conn.prepareStatement(sql);
