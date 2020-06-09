@@ -39,7 +39,7 @@ public class Main extends HttpServlet {
 
 		// リストにデータが入っているか確認
 
-		System.out.println("リストにデータが入っているか確認");
+		System.out.println("--リストにデータが入っているか確認--");
 		for (OrderRecordDto dto : orderRecordList) {
 			System.out.print(dto.getOrder_id() + ",");
 			System.out.print(dto.getOrder_time() + ",");
@@ -49,23 +49,6 @@ public class Main extends HttpServlet {
 			System.out.println("");
 		}
 
-		/*
-		 * // リストからExcelに出力するデータをセット
-		 * 
-		 * // ワークブック作成 Workbook book = new XSSFWorkbook();
-		 * 
-		 * // シート作成 Sheet sheet = book.createSheet();
-		 * 
-		 * // 行作成
-		 * 
-		 * int rowStart = 1; int rowEnd = 5; int lastColumn = 9;
-		 * 
-		 * for (int i = rowStart; i <= rowEnd; i++) { Row row = sheet.createRow(i);
-		 * 
-		 * // セル作成 for (int j = 0; j < lastColumn; j++) { Cell cell = row.createCell(j);
-		 * // セルに値セット cell.setCellValue("test"); } }
-		 */
-
 		// リストからExcelに出力するデータをセット
 
 		// ワークブック作成
@@ -73,19 +56,6 @@ public class Main extends HttpServlet {
 
 		// シート作成
 		Sheet sheet = book.createSheet();
-
-		//int rowStart = 0;
-		//int rowEnd = orderRecordList.size();
-		// int lastColumn = 5;
-
-		/*
-		 * for (int i = rowStart; i <= rowEnd; i++) { Row row = sheet.createRow(i); //
-		 * for (int j = 0; j < lastColumn; j++) {
-		 * 
-		 * for (int j = 0; j < orderRecordList.size(); j++) { Cell cell =
-		 * row.createCell(j); cell.setCellValue(orderRecordList.get(i).getOrder_id()); }
-		 * }
-		 */
 		
 		for (int i = 1; i < orderRecordList.size(); i++) {
 			Row row = sheet.createRow(i);
