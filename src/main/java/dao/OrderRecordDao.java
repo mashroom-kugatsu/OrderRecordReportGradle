@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,8 @@ public class OrderRecordDao {
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
 			// SELECT文の準備
-			String sql =
+			String sql = 
+					
 					"select \r\n" + 
 					"    orders.order_id --0\r\n" + 
 					"	,orders.order_time --1\r\n" + 
@@ -42,14 +44,21 @@ public class OrderRecordDao {
 					"	,customers.customer_location --9\r\n" + 
 					"from orders\r\n" + 
 					"left join customers on orders.customer_id = customers.customer_id \r\n" + 
-					"order by order_time asc\r\n" + 
-					"limit 100";		
-			
+					"order by order_id asc, order_time desc"
+					;
+
 			System.out.println(sql);
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SELECTの実行
 			ResultSet rs = pStmt.executeQuery();
+
+			/*
+			 * ResultSetMetaData rsmd= rs.getMetaData();
+			 * 
+			 * for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+			 * System.out.println(rsmd.getColumnName(i)); }
+			 */
 
 			// SELECTの結果をArrayListに格納
 			while (rs.next()) {
@@ -70,11 +79,53 @@ public class OrderRecordDao {
 
 				orderRecordList.add(dto);
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
+
 		return orderRecordList;
+	}
+
+	public List<String> findColumn() {
+		List<String> column = new ArrayList<String>();
+
+		// データベース接続
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+			// SELECT文の準備
+			String sql = "select \r\n" + "    orders.order_id --0\r\n" + "	,orders.order_time --1\r\n"
+					+ "	,orders.shop_id --2\r\n" + "	,orders.order_amount --3\r\n"
+					+ "	,customers.customer_id --4\r\n" + "	,customers.customer_name --5\r\n"
+					+ "	,customers.customer_age --6\r\n" + "	,customers.customer_birthday --7\r\n"
+					+ "	,customers.customer_gender --8 \r\n" + "	,customers.customer_location --9\r\n"
+					+ "from orders\r\n" + "left join customers on orders.customer_id = customers.customer_id \r\n"
+					+ "order by order_time asc\r\n" + "limit 100";
+
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			// SELECTの実行
+			ResultSet rs = pStmt.executeQuery();
+
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				System.out.println(rsmd.getColumnName(i));
+				column.add(rsmd.getColumnName(i));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return column;
 	}
 
 }

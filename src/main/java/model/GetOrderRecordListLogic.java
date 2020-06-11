@@ -10,7 +10,12 @@ public class GetOrderRecordListLogic {
 		OrderRecordDao dao = new OrderRecordDao();
 		List<OrderRecordDto> orderRecordList = dao.findAll();
 		return orderRecordList;
-
+	}
+	
+	public List<String> executeColumn() {
+		OrderRecordDao dao = new OrderRecordDao();
+		List<String> column = dao.findColumn();
+		return column;
 	}
 
 }
