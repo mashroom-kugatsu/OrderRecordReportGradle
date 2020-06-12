@@ -6,7 +6,7 @@
 　作成条件を選択してください。<br>
 　何も選択しないと全件抽出します<br><br>
 
-	<form action="/java_mysql/Search" method="POST">
+	<form action="/OrderRecordReportGradle/Main" method="post">
 	<b>注文日</b> (2012/1/1 ～　2015/1/1)<br>
 	指定した注文日以降のデータを出力します。<br>
 	<ul>

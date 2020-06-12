@@ -29,7 +29,7 @@ public class Main extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		// リストの取得
@@ -71,7 +71,7 @@ public class Main extends HttpServlet {
 				row.createCell(7).setCellValue(column.get(7));
 				row.createCell(8).setCellValue(column.get(8));
 				row.createCell(9).setCellValue(column.get(9));
-				
+
 			}
 			if (i >= 1) {
 				OrderRecordDto dto = orderRecordList.get(i);
@@ -99,6 +99,9 @@ public class Main extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("Excel出力完了");
+
 	}
 
 }

@@ -16,7 +16,9 @@ public class OrderRecordDao {
 	private final String JDBC_URL = "jdbc:postgresql://localhost/postgres";
 	private final String DB_USER = "postgres";
 	private final String DB_PASS = "postgres";
-
+    
+	
+	//レコードを取得してリストに格納するメソッド
 	public List<OrderRecordDto> findAll() {
 		List<OrderRecordDto> orderRecordList = new ArrayList<OrderRecordDto>();
 
@@ -28,7 +30,7 @@ public class OrderRecordDao {
 		}
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
-			// SELECT文の準備
+			// SELECT文の準備			
 			String sql = 
 					
 					"select \r\n" + 
@@ -52,13 +54,6 @@ public class OrderRecordDao {
 
 			// SELECTの実行
 			ResultSet rs = pStmt.executeQuery();
-
-			/*
-			 * ResultSetMetaData rsmd= rs.getMetaData();
-			 * 
-			 * for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-			 * System.out.println(rsmd.getColumnName(i)); }
-			 */
 
 			// SELECTの結果をArrayListに格納
 			while (rs.next()) {
@@ -88,6 +83,7 @@ public class OrderRecordDao {
 		return orderRecordList;
 	}
 
+	//レコードのカラム名を取得してリストに格納するメソッド
 	public List<String> findColumn() {
 		List<String> column = new ArrayList<String>();
 
@@ -100,13 +96,23 @@ public class OrderRecordDao {
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
 			// SELECT文の準備
-			String sql = "select \r\n" + "    orders.order_id --0\r\n" + "	,orders.order_time --1\r\n"
-					+ "	,orders.shop_id --2\r\n" + "	,orders.order_amount --3\r\n"
-					+ "	,customers.customer_id --4\r\n" + "	,customers.customer_name --5\r\n"
-					+ "	,customers.customer_age --6\r\n" + "	,customers.customer_birthday --7\r\n"
-					+ "	,customers.customer_gender --8 \r\n" + "	,customers.customer_location --9\r\n"
-					+ "from orders\r\n" + "left join customers on orders.customer_id = customers.customer_id \r\n"
-					+ "order by order_time asc\r\n" + "limit 100";
+			String sql =
+					
+					"select \r\n" + 
+					"    orders.order_id --0\r\n" + 
+					"	,orders.order_time --1\r\n" + 
+					"	,orders.shop_id --2\r\n" + 
+					"	,orders.order_amount --3\r\n" + 
+					"	,customers.customer_id --4\r\n" + 
+					"	,customers.customer_name --5\r\n" + 
+					"	,customers.customer_age --6\r\n" + 
+					"	,customers.customer_birthday --7\r\n" + 
+					"	,customers.customer_gender --8 \r\n" + 
+					"	,customers.customer_location --9\r\n" + 
+					"from orders\r\n" + 
+					"left join customers on orders.customer_id = customers.customer_id \r\n" + 
+					"order by order_id asc, order_time desc"
+					;
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 

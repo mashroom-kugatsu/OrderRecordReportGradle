@@ -6,6 +6,19 @@
 
 <web-app>
 	<display-name>Archetype Created Web Application</display-name>
+	<servlet>
+		<servlet-name>tekito</servlet-name>
+		<display-name>tekito</display-name>
+		<description></description>
+		<servlet-class>controller.tekito</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>tekito</servlet-name>
+		<url-pattern>/tekito</url-pattern>
+	</servlet-mapping>
+	
+
+	
 </web-app>
 
 
