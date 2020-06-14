@@ -12,9 +12,39 @@
 		<description></description>
 		<servlet-class>controller.tekito</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>CreateQuery</servlet-name>
+		<display-name>CreateQuery</display-name>
+		<description></description>
+		<servlet-class>controller.CreateQuery</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ExcelOut</servlet-name>
+		<display-name>ExcelOut</display-name>
+		<description></description>
+		<servlet-class>controller.ExcelOut</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>OrderRecordDaoServlet</servlet-name>
+		<display-name>OrderRecordDaoServlet</display-name>
+		<description></description>
+		<servlet-class>dao.OrderRecordDaoServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>tekito</servlet-name>
 		<url-pattern>/tekito</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CreateQuery</servlet-name>
+		<url-pattern>/CreateQuery</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExcelOut</servlet-name>
+		<url-pattern>/ExcelOut</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>OrderRecordDaoServlet</servlet-name>
+		<url-pattern>/OrderRecordDaoServlet</url-pattern>
 	</servlet-mapping>
 	
 
