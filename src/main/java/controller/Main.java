@@ -1,7 +1,12 @@
 package controller;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -26,23 +31,28 @@ import model.GetOrderRecordListLogic;
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private static final File DOWNLOAD_DIR = new File("D:\\downloadtest");
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		// リクエストパラメータの取得
+		// TODO: ありなしの判定をつくる
+		// FIXME:getParemeterValues調べる
+
 		request.setCharacterEncoding("UTF-8");
 		String query_order_id = request.getParameter("query_order_id");
 		String query_order_date = request.getParameter("query_order_date");
 		String query_age_range = request.getParameter("query_age_range");
 
 		// リストの取得
-		
-		//if(query_order_id == null)
-		
+
+		// if(query_order_id == null)
+
 		QueryDto queryDto = new QueryDto(query_order_id, query_order_date, query_age_range);
 		GetOrderRecordListLogic getOrderRecordListLogic = new GetOrderRecordListLogic();
 		List<OrderRecordDto> orderRecordList = getOrderRecordListLogic.execute(queryDto);
@@ -67,8 +77,7 @@ public class Main extends HttpServlet {
 
 		// シート作成
 		Sheet sheet = book.createSheet();
-		
-		
+
 		Row row = sheet.createRow(0);
 
 		row.createCell(0).setCellValue(column.get(0));
@@ -100,15 +109,35 @@ public class Main extends HttpServlet {
 			row.createCell(9).setCellValue(dto.getCustomer_location());
 		}
 
+		// TODO: ダウンロード機能を実装する
 		// ファイルに保存
-		String filename = "C:\\Users\\S.Matsukawa\\Desktop\\Java\\デリバリーレポート再現練習用\\workbook.xlsx";
+		String fileName = "OrderRecordReport.xlsx";
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddhhmmss");
+		String nameDate = dateFormat.format(date) ; 
 
-		try (FileOutputStream out = new FileOutputStream(filename);) {
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(fileName);
 			book.write(out);
-			book.close();
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			System.out.println(e.toString());
+		} finally {
+			try {
+				out.close();
+
+			} catch (IOException e) {
+				System.out.println(e.toString());
+
+		      }
+		    }
+		
+		  response.setContentType("application/octet-stream");
+		  response.setHeader("Content-Disposition", "attachment; filename=" + nameDate+ fileName);
+		  response.setHeader("Content-Description", "file download");
+		  response.setContentType("application/vnd.ms-excel");
+
+		  book.write(response.getOutputStream());
 
 		System.out.println("Excel出力完了");
 

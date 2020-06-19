@@ -30,6 +30,12 @@
 		<description></description>
 		<servlet-class>dao.OrderRecordDaoServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>DownloadServlet</servlet-name>
+		<display-name>DownloadServlet</display-name>
+		<description></description>
+		<servlet-class>controller.DownloadServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>tekito</servlet-name>
 		<url-pattern>/tekito</url-pattern>
@@ -45,6 +51,10 @@
 	<servlet-mapping>
 		<servlet-name>OrderRecordDaoServlet</servlet-name>
 		<url-pattern>/OrderRecordDaoServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DownloadServlet</servlet-name>
+		<url-pattern>/DownloadServlet</url-pattern>
 	</servlet-mapping>
 	
 

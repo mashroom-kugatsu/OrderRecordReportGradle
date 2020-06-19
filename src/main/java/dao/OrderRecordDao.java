@@ -17,6 +17,7 @@ public class OrderRecordDao {
 	private final String JDBC_URL = "jdbc:postgresql://localhost/postgres";
 	private final String DB_USER = "postgres";
 	private final String DB_PASS = "postgres";
+	//private List<String> columnTitles =   null;
     
 	
 	//レコードを取得してリストに格納するメソッド
@@ -122,6 +123,18 @@ public class OrderRecordDao {
 				orderRecordList.add(dto);
 			}
 
+			//カラム名の取得して、ArrayListに格納
+			//ResultSetMetaData rsmd = rs.getMetaData();
+
+		    //columnTitles = new ArrayList<String>();
+			
+			/*
+			 * for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+			 * System.out.println(rsmd.getColumnName(i));
+			 * columnTitles.add(rsmd.getColumnName(i)); }
+			 */
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -129,6 +142,14 @@ public class OrderRecordDao {
 
 		return orderRecordList;
 	}
+	
+	/**
+	 * findAll実行後に使用してください
+	 * @return
+	 */
+	/*
+	 * public List<String> getColumnTitles(){ return columnTitles; }
+	 */
 
 	//レコードのカラム名を取得してリストに格納するメソッド
 	public List<String> findColumn() {

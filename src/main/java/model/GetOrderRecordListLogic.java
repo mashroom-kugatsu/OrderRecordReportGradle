@@ -8,6 +8,9 @@ import dto.QueryDto;
 
 public class GetOrderRecordListLogic {
 	//レコード取得
+	
+	
+	
 	public List<OrderRecordDto> execute(QueryDto queryDto) {
 		OrderRecordDao dao = new OrderRecordDao();
 		List<OrderRecordDto> orderRecordList = dao.findAll(queryDto);
