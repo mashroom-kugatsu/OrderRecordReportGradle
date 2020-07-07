@@ -17,10 +17,9 @@ public class OrderRecordDao {
 	private final String JDBC_URL = "jdbc:postgresql://localhost/postgres";
 	private final String DB_USER = "postgres";
 	private final String DB_PASS = "postgres";
-	//private List<String> columnTitles =   null;
-    
-	
-	//レコードを取得してリストに格納するメソッド
+	public List<String> columnNameList = null;
+
+	// レコードを取得してリストに格納するメソッド
 	public List<OrderRecordDto> findAll(QueryDto queryDto) {
 		List<OrderRecordDto> orderRecordList = new ArrayList<OrderRecordDto>();
 
@@ -32,51 +31,43 @@ public class OrderRecordDao {
 		}
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
-			// SELECT文の準備	
-			
+			// SELECT文の準備
+
 			String query_order_date = queryDto.getQuery_order_date();
 			String query_order_id = queryDto.getQuery_order_id();
 			String query_age_range = queryDto.getQuery_age_range();
-			
+
 			StringBuffer sql = new StringBuffer();
-			
-			 sql.append("select \r\n" + 
-			 		"    orders.order_id --0\r\n" + 
-			 		"	,orders.order_time --1\r\n" + 
-			 		"	,orders.shop_id --2\r\n" + 
-			 		"	,orders.order_amount --3\r\n" + 
-			 		"	,customers.customer_id --4\r\n" + 
-			 		"	,customers.customer_name --5\r\n" + 
-			 		"	,customers.customer_age --6\r\n" + 
-			 		"	,customers.customer_birthday --7\r\n" + 
-			 		"	,customers.customer_gender --8 \r\n" + 
-			 		"	,customers.customer_location --9\r\n" + 
-			 		"from orders\r\n" + 
-			 		"left join customers on orders.customer_id = customers.customer_id \r\n" + 
-			 		"where\r\n" + 
-			 		"    order_time >= '2012-01-01 00:00:00' \r\n");
-			 
-			//注文日が選択された場合 
+
+			sql.append("select \r\n" + "    orders.order_id --0\r\n" + "	,orders.order_time --1\r\n"
+					+ "	,orders.shop_id --2\r\n" + "	,orders.order_amount --3\r\n"
+					+ "	,customers.customer_id --4\r\n" + "	,customers.customer_name --5\r\n"
+					+ "	,customers.customer_age --6\r\n" + "	,customers.customer_birthday --7\r\n"
+					+ "	,customers.customer_gender --8 \r\n" + "	,customers.customer_location --9\r\n"
+					+ "from orders\r\n" + "left join customers on orders.customer_id = customers.customer_id \r\n"
+					+ "where\r\n" + "    order_time >= '2012-01-01 00:00:00' \r\n");
+
+			// 注文日が選択された場合
 			if (query_order_date != "") {
 				sql.append(" and order_time >='" + query_order_date + " 00:00:00" + "'\r\n");
 			}
 
-			//注文番号が選択された場合
+			// 注文番号が選択された場合
 			if (query_order_id != null) {
 				if (query_order_id.equals("1")) {
 					sql.append(" and order_id >=1 and order_id <= 10000 \r\n");
-				}else if (query_order_id.equals("2")) {
+				} else if (query_order_id.equals("2")) {
 					sql.append(" and order_id >=10001 and order_id <= 20000 \r\n");
-				}else if (query_order_id.equals("3")) {
+				} else if (query_order_id.equals("3")) {
 					sql.append(" and order_id >=20001 and order_id <= 30000 \r\n");
-				}else if (query_order_id.equals("4")) {
+				} else if (query_order_id.equals("4")) {
 					sql.append(" and order_id >=30001 and order_id <= 40000 \r\n");
-				}else if (query_order_id.equals("5")) {
+				} else if (query_order_id.equals("5")) {
 					sql.append(" and order_id >=40001 and order_id <= 50000 \r\n");
 				}
 			}
 
-			//年代が選択された場合
+			// 年代が選択された場合
 			if (query_age_range != null) {
 				if (query_age_range.equals("1"))
 					sql.append(" and (customer_age/10)*10 = 10 \r\n");
@@ -91,13 +82,13 @@ public class OrderRecordDao {
 			} else {
 				sql.append("");
 			}
-			 
+
 			sql.append("order by order_id asc, order_time asc \r\n");
 
-			//SQL文確認
+			// SQL文確認
 			System.out.println("SQL文表示");
 			System.out.println(sql);
-			
+
 			PreparedStatement pStmt = conn.prepareStatement(new String(sql));
 
 			// SELECTの実行
@@ -123,75 +114,14 @@ public class OrderRecordDao {
 				orderRecordList.add(dto);
 			}
 
-			//カラム名の取得して、ArrayListに格納
-			//ResultSetMetaData rsmd = rs.getMetaData();
-
-		    //columnTitles = new ArrayList<String>();
-			
-			/*
-			 * for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-			 * System.out.println(rsmd.getColumnName(i));
-			 * columnTitles.add(rsmd.getColumnName(i)); }
-			 */
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return orderRecordList;
-	}
-	
-	/**
-	 * findAll実行後に使用してください
-	 * @return
-	 */
-	/*
-	 * public List<String> getColumnTitles(){ return columnTitles; }
-	 */
-
-	//レコードのカラム名を取得してリストに格納するメソッド
-	public List<String> findColumn() {
-		List<String> column = new ArrayList<String>();
-
-		// データベース接続
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-
-			// SELECT文の準備
-			String sql =
-					
-					"select \r\n" + 
-					"    orders.order_id --0\r\n" + 
-					"	,orders.order_time --1\r\n" + 
-					"	,orders.shop_id --2\r\n" + 
-					"	,orders.order_amount --3\r\n" + 
-					"	,customers.customer_id --4\r\n" + 
-					"	,customers.customer_name --5\r\n" + 
-					"	,customers.customer_age --6\r\n" + 
-					"	,customers.customer_birthday --7\r\n" + 
-					"	,customers.customer_gender --8 \r\n" + 
-					"	,customers.customer_location --9\r\n" + 
-					"from orders\r\n" + 
-					"left join customers on orders.customer_id = customers.customer_id \r\n" + 
-					"order by order_id asc, order_time desc"
-					;
-
-			PreparedStatement pStmt = conn.prepareStatement(sql);
-
-			// SELECTの実行
-			ResultSet rs = pStmt.executeQuery();
-
+			// カラム名の取得して、ArrayListに格納
 			ResultSetMetaData rsmd = rs.getMetaData();
+
+			columnNameList = new ArrayList<String>();
 
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 				System.out.println(rsmd.getColumnName(i));
-				column.add(rsmd.getColumnName(i));
+				columnNameList.add(rsmd.getColumnName(i));
 			}
 
 		} catch (SQLException e) {
@@ -199,7 +129,16 @@ public class OrderRecordDao {
 			return null;
 		}
 
-		return column;
+		return orderRecordList;
 	}
 
+	/**
+	 * findAll実行後に使用してください
+	 * 
+	 * @return
+	 */
+
+	public List<String> getColumnName() {
+		return columnNameList;
+	}
 }

@@ -7,21 +7,18 @@ import dto.OrderRecordDto;
 import dto.QueryDto;
 
 public class GetOrderRecordListLogic {
-	//レコード取得
-	
-	
-	
+
+	OrderRecordDao dao = new OrderRecordDao();
+
+	// レコード取得
 	public List<OrderRecordDto> execute(QueryDto queryDto) {
-		OrderRecordDao dao = new OrderRecordDao();
 		List<OrderRecordDto> orderRecordList = dao.findAll(queryDto);
 		return orderRecordList;
 	}
-	
-	//カラム名取得
-	public List<String> executeColumn() {
-		OrderRecordDao dao = new OrderRecordDao();
-		List<String> column = dao.findColumn();
-		return column;
-	}
 
+	// カラム名取得
+	public List<String> executeCulumn() {
+		List<String> columnNameList = dao.getColumnName();
+		return columnNameList;
+	}
 }

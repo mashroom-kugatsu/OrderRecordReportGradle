@@ -53,44 +53,34 @@ public class Main extends HttpServlet {
 
 		// if(query_order_id == null)
 
+		// TODO:Logic.javaに引越しする
 		QueryDto queryDto = new QueryDto(query_order_id, query_order_date, query_age_range);
 		GetOrderRecordListLogic getOrderRecordListLogic = new GetOrderRecordListLogic();
 		List<OrderRecordDto> orderRecordList = getOrderRecordListLogic.execute(queryDto);
-		List<String> column = getOrderRecordListLogic.executeColumn();
-
-		// リストにデータが入っているか確認
-
-		System.out.println("--リストにデータが入っているか確認--");
-		for (OrderRecordDto dto : orderRecordList) {
-			System.out.print(dto.getOrder_id() + ",");
-			System.out.print(dto.getOrder_time() + ",");
-			System.out.print(dto.getCustomer_name() + ",");
-			System.out.print(dto.getCustomer_age() + ",");
-			System.out.print(dto.getCustomer_gender() + ",");
-			System.out.println("");
-		}
+		List<String> columnNameList = getOrderRecordListLogic.executeCulumn();
 
 		// リストからExcelに出力するデータをセット
-
 		// ワークブック作成
 		Workbook book = new XSSFWorkbook();
 
 		// シート作成
 		Sheet sheet = book.createSheet();
 
+		//1行目にカラム名をセット
 		Row row = sheet.createRow(0);
 
-		row.createCell(0).setCellValue(column.get(0));
-		row.createCell(1).setCellValue(column.get(1));
-		row.createCell(2).setCellValue(column.get(2));
-		row.createCell(3).setCellValue(column.get(3));
-		row.createCell(4).setCellValue(column.get(4));
-		row.createCell(5).setCellValue(column.get(5));
-		row.createCell(6).setCellValue(column.get(6));
-		row.createCell(7).setCellValue(column.get(7));
-		row.createCell(8).setCellValue(column.get(8));
-		row.createCell(9).setCellValue(column.get(9));
+		row.createCell(0).setCellValue(columnNameList.get(0));
+		row.createCell(1).setCellValue(columnNameList.get(1));
+		row.createCell(2).setCellValue(columnNameList.get(2));
+		row.createCell(3).setCellValue(columnNameList.get(3));
+		row.createCell(4).setCellValue(columnNameList.get(4));
+		row.createCell(5).setCellValue(columnNameList.get(5));
+		row.createCell(6).setCellValue(columnNameList.get(6));
+		row.createCell(7).setCellValue(columnNameList.get(7));
+		row.createCell(8).setCellValue(columnNameList.get(8));
+		row.createCell(9).setCellValue(columnNameList.get(9));
 
+		//レコードをセット
 		for (int i = 0; i < orderRecordList.size(); i++) {
 			row = sheet.createRow(i + 1);
 
@@ -113,31 +103,16 @@ public class Main extends HttpServlet {
 		// ファイルに保存
 		String fileName = "OrderRecordReport.xlsx";
 		Date date = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddhhmmss");
-		String nameDate = dateFormat.format(date) ; 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddHHmm");
+		String nameDate = dateFormat.format(date);
 
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(fileName);
-			book.write(out);
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		} finally {
-			try {
-				out.close();
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment; filename=" + nameDate + fileName);
+		response.setHeader("Content-Description", "file download");
+		response.setContentType("application/vnd.ms-excel");
 
-			} catch (IOException e) {
-				System.out.println(e.toString());
-
-		      }
-		    }
-		
-		  response.setContentType("application/octet-stream");
-		  response.setHeader("Content-Disposition", "attachment; filename=" + nameDate+ fileName);
-		  response.setHeader("Content-Description", "file download");
-		  response.setContentType("application/vnd.ms-excel");
-
-		  book.write(response.getOutputStream());
+		book.write(response.getOutputStream());
+		book.close();
 
 		System.out.println("Excel出力完了");
 
