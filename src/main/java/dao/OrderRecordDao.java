@@ -17,11 +17,13 @@ public class OrderRecordDao {
 	private final String JDBC_URL = "jdbc:postgresql://localhost/postgres";
 	private final String DB_USER = "postgres";
 	private final String DB_PASS = "postgres";
-	public List<String> columnNameList = null;
+	
+	List<OrderRecordDto> orderRecordList = null;
+	List<String> columnNameList = null;
 
 	// レコードを取得してリストに格納するメソッド
-	public List<OrderRecordDto> findAll(QueryDto queryDto) {
-		List<OrderRecordDto> orderRecordList = new ArrayList<OrderRecordDto>();
+	public List<OrderRecordDto> getOrderRecordList(QueryDto queryDto) {
+		orderRecordList = new ArrayList<OrderRecordDto>();
 
 		// データベース接続
 		try {
@@ -116,19 +118,16 @@ public class OrderRecordDao {
 
 			// カラム名の取得して、ArrayListに格納
 			ResultSetMetaData rsmd = rs.getMetaData();
-
 			columnNameList = new ArrayList<String>();
 
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-				System.out.println(rsmd.getColumnName(i));
-				columnNameList.add(rsmd.getColumnName(i));
+			    columnNameList.add(rsmd.getColumnName(i));
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
-
 		return orderRecordList;
 	}
 
